@@ -3,8 +3,15 @@
 #include <cstring>
 #include <immintrin.h>
 
+#ifdef VERBOSE
+	#define LOG(code) code;
+#else
+	#define LOG(code)
+#endif
+
 #define SSE
 #define BONUS
+
 #define BLOCK_SIZE 8
 #define ELEM_SIZE 4
 
@@ -49,13 +56,14 @@ void sse(const float *const A, const float *const B, float *const res, const siz
 		}
 }
 
+// TODO: Implement this
 //void sseDrip(const float *const A, const float *const B, float *const res, const size_t &dim) {}
 
 void check(const float *const A, const float *const B, const float *const res, const size_t &dim) {
 	auto *const exp = (float *) malloc(dim * dim * sizeof(float));
 
 	naive(A, B, exp, dim);
-	print_matrix(exp, dim, "Expected");
+	LOG(print_matrix(exp, dim, "Expected"))
 
 	for (size_t i = 0; i < (dim * dim); i++)
 		if (exp[i] != res[i])
@@ -83,7 +91,7 @@ int main() {
 	}
 
 	sse(A, B, C, dim);
-	print_matrix(C, dim, "Restult");
+	LOG(print_matrix(C, dim, "Restult"))
 
 #elif defined(BONUS)
 
@@ -107,11 +115,13 @@ int main() {
 		B[i] = rand() % 5;
 	}
 
-	print_matrix(A, dim, "A");
-	print_matrix(B, dim, "B");
+	LOG(
+		print_matrix(A, dim, "A");
+		print_matrix(B, dim, "B")
+	)
 
 	naive_drip(A, B, C, dim);
-	print_matrix(C, dim, "C");
+	LOG(print_matrix(C, dim, "C"))
 #endif
 
 #ifdef CHECK_MUL
@@ -122,5 +132,5 @@ int main() {
 	free(B);
 	free(C);
 
-	return 0;
+	return EXIT_SUCCESS;
 }

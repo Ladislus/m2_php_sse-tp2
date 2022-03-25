@@ -6,7 +6,15 @@ PROJECT(
 )
 
 SET(CMAKE_CXX_STANDARD 23)
-ADD_COMPILE_OPTIONS(-O3 -Wall -Wextra -pedantic -DCHECK_MUL)
+ADD_COMPILE_OPTIONS(-Wall -Wextra -pedantic)
+
+IF(${CMAKE_BUILD_TYPE} MATCHES Debug)
+    MESSAGE(STATUS "Compiling in debug mode")
+    ADD_COMPILE_OPTIONS(-g -DVERBOSE -O0 -DCHECK_MUL)
+ELSE()
+    MESSAGE(STATUS "Compiling in release mode")
+    ADD_COMPILE_OPTIONS(-O3)
+ENDIF()
 
 FILE(GLOB SRCS ${CMAKE_SOURCE_DIR}/*.cpp)
 
