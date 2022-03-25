@@ -1,7 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <immintrin.h>
+#include <cstring>
 
+#define SSE
+#define BLOCK_SIZE 8
+#define ELEM_SIZE 4
 
 void print_mat(float *A, size_t dim) {
     printf("Matrice : \n");
@@ -15,17 +20,15 @@ void print_mat(float *A, size_t dim) {
     printf("\n");
 }
 
-void mul_drip(float *A, float *B, float *res, size_t dim) {
+void mul_drip_naive(float *A, float *B, float *res, size_t dim) {
     /*
      * Truc cool sur l'auto-save
      */
-    printf("A l'appel de mul_drip : \n");
+    printf("A l'appel de mul_drip_naive : \n");
     print_mat(res, dim);
     for (int i = 0; i < dim; ++i) {
         for (int j = 0; j < dim; ++j) {
             for (int k = 0; k < dim; ++k) {
-                printf("\nRes[%i] = A[%i] : %f * B[%i] : %f \n", i * dim + k, i * dim + j, A[i * dim + j], j * dim + k,
-                       B[j * dim + k]);
                 res[i * dim + k] += A[i * dim + j] * B[j * dim + k];
                 print_mat(res, dim);
             }
@@ -33,6 +36,20 @@ void mul_drip(float *A, float *B, float *res, size_t dim) {
     }
 }
 
+void mul_drip_sse(float *A, float *B, float *res, size_t dim) {
+    for (int i = 0; i < dim; ++i) {
+        for (int j = 0; j < dim; ++j) {
+            __m128 rA = _mm_load1_ps(A + i * dim + j);
+            for (int k = 0; k < dim; k += ELEM_SIZE) {
+                __m128 rB = _mm_load_ps(B + j * dim + k);
+                rB = _mm_mul_ps(rA, rB);
+                __m128 r_res = _mm_load_ps(res + i * dim + k);
+                r_res = _mm_add_ps(r_res, rB);
+                _mm_store_ps(res + (i * dim + k), r_res);
+            }
+        }
+    }
+}
 
 void naive_mul(float *A, float *B, float *res, size_t dim) {
     for (size_t i = 0; i < dim; ++i) {
@@ -62,10 +79,26 @@ void check(float *A, float *B, float *res, size_t dim) {
 }
 
 int main() {
-    size_t dim = 2;
+    size_t dim = 1 * BLOCK_SIZE;
 
     srand(time(nullptr));
 
+#ifdef SSE
+    float * A = (float*) _mm_malloc(dim*dim*sizeof(float), 16);
+    float * B = (float*) _mm_malloc(dim*dim*sizeof(float), 16);
+    float * C = (float*) _mm_malloc(dim*dim*sizeof(float), 16);
+
+    memset(C, 0, dim*dim*sizeof(float));
+
+    for (int i = 0; i < dim*dim; ++i) {
+        A[i] = rand() % 5;
+        B[i] = rand() % 5;
+    }
+    mul_drip_sse(A, B, C, dim);
+    printf("La notre \n");
+    print_mat(C, dim);
+
+#else
     float *A = (float *) malloc(dim * dim * sizeof(float));
     float *B = (float *) malloc(dim * dim * sizeof(float));
     float *C = (float *) calloc(dim * dim, sizeof(float));
@@ -84,11 +117,12 @@ int main() {
 //    naive_mul(A, B, C, dim);
 //    print_mat(C, dim);
 
-    mul_drip(A, B, C, dim);
+    mul_drip_naive(A, B, C, dim);
     print_mat(C, dim);
 
 
 // you can activate check by adding -DCHECK_MUL to your command line
+#endif
 #ifdef CHECK_MUL
     check(A, B, C, dim);
 #endif
