@@ -4,7 +4,8 @@
 #include <immintrin.h>
 #include <cstring>
 
-#define SSE
+//#define SSE
+#define BONUS
 #define BLOCK_SIZE 8
 #define ELEM_SIZE 4
 
@@ -84,19 +85,32 @@ int main() {
     srand(time(nullptr));
 
 #ifdef SSE
-    float * A = (float*) _mm_malloc(dim*dim*sizeof(float), 16);
-    float * B = (float*) _mm_malloc(dim*dim*sizeof(float), 16);
-    float * C = (float*) _mm_malloc(dim*dim*sizeof(float), 16);
+    float *A = (float *) _mm_malloc(dim * dim * sizeof(float), 16);
+    float *B = (float *) _mm_malloc(dim * dim * sizeof(float), 16);
+    float *C = (float *) _mm_malloc(dim * dim * sizeof(float), 16);
 
-    memset(C, 0, dim*dim*sizeof(float));
+    memset(C, 0, dim * dim * sizeof(float));
 
-    for (int i = 0; i < dim*dim; ++i) {
+    for (int i = 0; i < dim * dim; ++i) {
         A[i] = rand() % 5;
         B[i] = rand() % 5;
     }
     mul_drip_sse(A, B, C, dim);
     printf("La notre \n");
     print_mat(C, dim);
+
+#elif defined(BONUS)
+
+    float *A = (float *) _mm_malloc(dim * dim * sizeof(float), 16);
+    float *B = (float *) _mm_malloc(dim * dim * sizeof(float), 16);
+    float *C = (float *) _mm_malloc(dim * dim * sizeof(float), 16);
+
+    memset(C, 0, dim * dim * sizeof(float));
+
+    for (int i = 0; i < dim * dim; ++i) {
+        A[i] = rand() % 5;
+        B[i] = rand() % 5;
+    }
 
 #else
     float *A = (float *) malloc(dim * dim * sizeof(float));
