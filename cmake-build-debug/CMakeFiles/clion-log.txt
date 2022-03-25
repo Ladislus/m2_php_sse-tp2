@@ -1,0 +1,7 @@
+/home/ladislus/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.7172.20/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/home/ladislus/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.7172.20/bin/ninja/linux/ninja -G Ninja /home/ladislus/Git/m2_php_sse-tp2
+CMake Error at CMakeLists.txt:1 (CMAKE_MINIMUM_REQUIRED):
+  CMAKE_MINIMUM_REQUIRED called with unknown argument "LANGUAGE".
+
+
+-- Configuring incomplete, errors occurred!
+See also "/home/ladislus/Git/m2_php_sse-tp2/cmake-build-debug/CMakeFiles/CMakeOutput.log".
