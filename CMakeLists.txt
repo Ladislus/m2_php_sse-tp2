@@ -25,6 +25,8 @@ ELSE()
     ADD_COMPILE_OPTIONS(-O3)
 ENDIF()
 
+# if both are set to ON, SSE has priority over BONUS
+# To use naive approach, disable both
 OPTION(SSE "Enable SSE" ON)
 OPTION(BONUS "Enable SSE" OFF)
 
