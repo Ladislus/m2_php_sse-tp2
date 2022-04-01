@@ -9,7 +9,6 @@
 	#define LOG(code)
 #endif
 
-#define BLOCK_SIZE 4
 #define ELEM_SIZE 4
 
 /*
@@ -152,7 +151,7 @@ void check(const float *const A, const float *const B, const float *const res, c
 }
 
 int main() {
-	constexpr size_t dim = 3 * BLOCK_SIZE;
+	constexpr size_t dim = 3 * ELEM_SIZE;
 	const size_t size = dim * dim;
 
 	srand(time(nullptr));
