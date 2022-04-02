@@ -149,7 +149,6 @@ int main() {
 	LOG(print_matrix(C, dim, "Restult"))
 
 #elif defined(BONUS)
-
 	auto *const A = (float*) _mm_malloc(size * sizeof(float), 16);
 	auto *const B = (float*) _mm_malloc(size * sizeof(float), 16);
 	auto *const C = (float*) _mm_malloc(size * sizeof(float), 16);
