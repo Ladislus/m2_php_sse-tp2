@@ -105,24 +105,7 @@ void sse_drip(const float *const A, const float *const B, float *const res, cons
 				for (size_t m = 0; m < ELEM_SIZE; ++m)
 					for (size_t n = 0; n < ELEM_SIZE; ++n) {
 						__m128 r = _mm_mul_ps(rA[m], rB[n]);
-
-                        size_t index = (i + m) * dim + (k + n);
-                        float reduction = reduce(r);
-
-                        // Debug log to check if the reduction is correct,
-                        // And written to the result matrix in the right place
-                        LOG(
-                            std::clog << "i: " << i << " j: " << j << " k: " << k << " m: " << m << " n: " << n << " index: " << index << std::endl;
-                            std::clog << "A: " << register_to_string(rA[m]) << std::endl << "B: " << register_to_string(rB[n]) << std::endl << "r: " << register_to_string(r) << std::endl;
-                        )
-
-						res[index] += reduction;
-
-                        // Debug log to check the current state of the result matrix
-                        LOG(
-                            print_matrix(res, dim, "Current res");
-                            std::clog << "#################################" << std::endl;
-                        )
+						res[(i + m) * dim + (k + n)] += reduce(r);
 					}
 			}
 		}
