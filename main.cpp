@@ -131,6 +131,8 @@ int main() {
 	srand(time(nullptr));
 
 #ifdef SSE
+	std::clog << "SSE Mode" << std::endl;
+
 	auto *const A = (float *) _mm_malloc(size * sizeof(float), 16);
 	auto *const B = (float *) _mm_malloc(size * sizeof(float), 16);
 	auto *const C = (float *) _mm_malloc(size * sizeof(float), 16);
@@ -149,6 +151,8 @@ int main() {
 	LOG(print_matrix(C, dim, "Restult"))
 
 #elif defined(BONUS)
+	std::clog << "Bonus Mode" << std::endl;
+
 	auto *const A = (float*) _mm_malloc(size * sizeof(float), 16);
 	auto *const B = (float*) _mm_malloc(size * sizeof(float), 16);
 	auto *const C = (float*) _mm_malloc(size * sizeof(float), 16);
@@ -166,6 +170,8 @@ int main() {
 	sse_drip(A, B, C, dim);
 	LOG(print_matrix(C, dim, "Result");)
 #else
+	std::clog << "Naive Mode" << std::endl;
+
 	auto *const A = (float*) malloc(size * sizeof(float));
 	auto *const B = (float*) malloc(size * sizeof(float));
 	auto *const C = (float*) calloc(size, sizeof(float));
