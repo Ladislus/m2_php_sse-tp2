@@ -27,16 +27,7 @@ inline std::string register_to_string(const __m128& reg) {
  * Utility function to reduce a float register to a single value
  */
 inline float reduce(const __m128& reg) {
-    // Unload the register into a float array
-	float elems[4];
-	_mm_store_ps(elems, reg);
-
-    // Sum the array
-	float sum = 0.f;
-	for (float elem : elems) sum += elem;
-
-    // Return the sum
-	return sum;
+    return reg[0] + reg[1] + reg[2] + reg[3];
 }
 
 /*
