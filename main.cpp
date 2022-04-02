@@ -125,7 +125,7 @@ void check(const float *const A, const float *const B, const float *const res, c
 }
 
 int main() {
-	constexpr size_t dim = 3 * ELEM_SIZE;
+	constexpr size_t dim = 100 * ELEM_SIZE;
 	const size_t size = dim * dim;
 
 	srand(time(nullptr));
